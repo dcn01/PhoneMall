@@ -3,10 +3,6 @@ package com.zhiji.phonemall.di.module;
 import android.app.Activity;
 import android.support.v4.app.Fragment;
 import com.zhiji.phonemall.di.scope.FragmentScope;
-import com.zhiji.phonemall.ui.main.MainModel;
-import com.zhiji.phonemall.ui.main.MainPresenter;
-import com.zhiji.phonemall.ui.splash.SplashModel;
-import com.zhiji.phonemall.ui.splash.SplashPresenter;
 import dagger.Module;
 import dagger.Provides;
 

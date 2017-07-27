@@ -1,5 +1,7 @@
 package com.zhiji.phonemall.ui.main;
 
+import com.zhiji.phonemall.di.component.AppComponent;
+import com.zhiji.phonemall.di.scope.ActivityScope;
 import dagger.Component;
 
 /**
@@ -9,7 +11,8 @@ import dagger.Component;
  *     desc   :
  * </pre>
  */
-@Component(modules = {MainModule.class})
+@ActivityScope
+@Component(dependencies = AppComponent.class,modules = {MainModule.class})
 public interface MainComponent {
 
   void inject(MainActivity activity);

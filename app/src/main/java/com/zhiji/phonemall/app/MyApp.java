@@ -22,10 +22,9 @@ public class MyApp extends Application {
   private static AppComponent mAppComponent;
   private Set<Activity> mActivitySet;
 
-  public static MyApp mInstance() {
-    return mApp;
+  public static AppComponent getAppComponent() {
+    return mAppComponent;
   }
-
   public static MyApp getMyApp() {
     return mApp;
   }

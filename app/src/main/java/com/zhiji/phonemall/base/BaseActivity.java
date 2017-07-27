@@ -7,8 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import javax.inject.Inject;
 
 /**
@@ -19,8 +17,6 @@ import javax.inject.Inject;
  * </pre>
  */
 public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity {
-
-  protected CompositeDisposable mCompositeDisposable;
   @Inject
   protected P mPresenter;
   protected Unbinder mUnbinder;
@@ -59,7 +55,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     if (mPresenter != null) {
       mPresenter.detachView();
     }
-    unSubscribe();
   }
 
   /**
@@ -92,21 +87,5 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
    */
   protected void showLongToast(String message) {
     Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-  }
-
-  /**
-   * 解除所有的订阅
-   */
-  protected void unSubscribe() {
-    if (mCompositeDisposable != null) {
-      mCompositeDisposable.clear();
-    }
-  }
-
-  protected void addSubscribe(Disposable disposable) {
-    if (mCompositeDisposable == null) {
-      mCompositeDisposable = new CompositeDisposable();
-    }
-    mCompositeDisposable.add(disposable);
   }
 }

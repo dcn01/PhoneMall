@@ -1,5 +1,7 @@
 package com.zhiji.phonemall.ui.main;
 
+import com.zhiji.phonemall.base.RxPresenter;
+import com.zhiji.phonemall.ui.main.MainContract.IPresenter;
 import com.zhiji.phonemall.ui.main.MainContract.IView;
 import javax.inject.Inject;
 
@@ -10,29 +12,15 @@ import javax.inject.Inject;
  *     desc   :
  * </pre>
  */
-public class MainPresenter implements MainContract.IPresenter {
+public class MainPresenter extends RxPresenter<IView> implements IPresenter {
 
-  private MainContract.IView mView;
-  private MainModel mMainModel;
   @Inject
-  public MainPresenter(IView view, MainModel mainModel) {
-    this.mMainModel = mainModel;
+  public MainPresenter(IView view) {
     attachView(view);
   }
 
   @Override
-  public void attachView(IView view) {
-    this.mView = view;
-  }
-
-  @Override
-  public void detachView() {
-    mView = null;
-  }
-
-  @Override
   public void getMainData() {
-    mView.showMessage(mMainModel.getMainData());
-
+    mView.setMainData();
   }
 }

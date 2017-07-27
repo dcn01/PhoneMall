@@ -25,9 +25,4 @@ public class SplashModule {
     return mView;
   }
 
-  @Provides
-  SplashModel provideSplashModel() {
-    return new SplashModel();
-  }
-
 }

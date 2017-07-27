@@ -1,6 +1,5 @@
 package com.zhiji.phonemall.ui.main;
 
-import com.zhiji.phonemall.base.BasePresenter;
 import com.zhiji.phonemall.base.BaseView;
 
 /**
@@ -12,12 +11,14 @@ import com.zhiji.phonemall.base.BaseView;
  */
 public class MainContract {
 
-  interface IPresenter extends BasePresenter<IView> {
+  interface IPresenter {
+
     void getMainData();
   }
 
   interface IView extends BaseView {
 
+    void setMainData();
   }
 
 }

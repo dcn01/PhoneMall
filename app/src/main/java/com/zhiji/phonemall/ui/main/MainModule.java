@@ -24,9 +24,4 @@ public class MainModule {
   MainContract.IView provideIView() {
     return mView;
   }
-
-  @Provides
-  MainModel provideMainModel() {
-    return new MainModel();
-  }
 }
