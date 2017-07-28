@@ -22,7 +22,6 @@ import butterknife.Unbinder;
 public abstract class BaseFragment<P extends MvpPresenter> extends Fragment {
 
   protected Context mContext;
-  protected P mPresenter;
   protected Unbinder mUnbinder;
   protected ProgressDialog mProgressDialog;
   protected View mContentView;
@@ -41,7 +40,6 @@ public abstract class BaseFragment<P extends MvpPresenter> extends Fragment {
     mUnbinder = ButterKnife.bind(this, mContentView);
     mProgressDialog = new ProgressDialog(mContext);
     mProgressDialog.setMessage("正在加载中...");
-    mPresenter = createPresenter();
     initView();
     return mContentView;
   }
@@ -65,9 +63,6 @@ public abstract class BaseFragment<P extends MvpPresenter> extends Fragment {
   public void onDestroy() {
     super.onDestroy();
     mUnbinder.unbind();
-    if (mPresenter != null) {
-      mPresenter.detachView();
-    }
   }
 
   /**
