@@ -1,15 +1,14 @@
 package com.zhiji.phonemall.ui.splash;
 
-import android.util.Log;
-import com.zhiji.phonemall.base.RxPresenter;
-import com.zhiji.phonemall.ui.splash.SplashContract.IPresenter;
-import com.zhiji.phonemall.ui.splash.SplashContract.IView;
+import com.google.gson.Gson;
+import com.zhiji.phonemall.base.BasePresenter;
+import com.zhiji.phonemall.data.DataManager;
+import com.zhiji.phonemall.data.network.model.TestResponse;
 import com.zhiji.phonemall.utils.LogUtil;
-import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
-import java.util.concurrent.TimeUnit;
+import com.zhiji.phonemall.utils.rx.RxUtil;
+import com.zhiji.phonemall.utils.rx.SchedulerProvider;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
 import javax.inject.Inject;
 
 /**
@@ -19,37 +18,31 @@ import javax.inject.Inject;
  *     desc   :
  * </pre>
  */
-public class SplashPresenter extends RxPresenter<IView> implements IPresenter {
-
+public class SplashPresenter<V extends SplashMvpView> extends BasePresenter<V> implements
+    SplashMvpPresenter<V> {
 
   @Inject
-  protected SplashPresenter(IView mView) {
-    attachView(mView);
+  public SplashPresenter(DataManager dataManager,
+      CompositeDisposable compositeDisposable,
+      SchedulerProvider schedulerProvider) {
+    super(dataManager, compositeDisposable, schedulerProvider);
   }
 
-  public void getSplashData() {
-    Observable.timer(3, TimeUnit.SECONDS)
-        .subscribe(new Observer<Long>() {
-          @Override
-          public void onSubscribe(@NonNull Disposable d) {
-            LogUtil.d("TAG", Thread.currentThread().getName());
-            addSubscribe(d);
-          }
-
-          @Override
-          public void onNext(@NonNull Long aLong) {
-            mView.setSplashData();
-          }
-
-          @Override
-          public void onError(@NonNull Throwable e) {
-
-          }
-
-          @Override
-          public void onComplete() {
-
-          }
-        });
+  @Override
+  public void requestSplashData() {
+    getCompositeDisposable()
+        .add(getDataManager().requestSplashData()
+            .compose(RxUtil.<TestResponse>rxSchedulerHelper())
+            .subscribe(new Consumer<TestResponse>() {
+              @Override
+              public void accept(TestResponse testResponse) throws Exception {
+                LogUtil.d("TAG", new Gson().toJson(testResponse));
+              }
+            }, new Consumer<Throwable>() {
+              @Override
+              public void accept(Throwable throwable) throws Exception {
+                LogUtil.d("TAG", throwable.getMessage());
+              }
+            }));
   }
 }

@@ -1,9 +1,20 @@
 package com.zhiji.phonemall.di.module;
 
-import android.app.Activity;
-import com.zhiji.phonemall.di.scope.ActivityScope;
+import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
+import com.zhiji.phonemall.di.qualifier.ActivityContext;
+import com.zhiji.phonemall.di.scope.PerActivity;
+import com.zhiji.phonemall.ui.main.MainMvpPresenter;
+import com.zhiji.phonemall.ui.main.MainMvpView;
+import com.zhiji.phonemall.ui.main.MainPresenter;
+import com.zhiji.phonemall.ui.splash.SplashMvpPresenter;
+import com.zhiji.phonemall.ui.splash.SplashMvpView;
+import com.zhiji.phonemall.ui.splash.SplashPresenter;
+import com.zhiji.phonemall.utils.rx.AppSchedulerProvider;
+import com.zhiji.phonemall.utils.rx.SchedulerProvider;
 import dagger.Module;
 import dagger.Provides;
+import io.reactivex.disposables.CompositeDisposable;
 
 /**
  * <pre>
@@ -15,15 +26,45 @@ import dagger.Provides;
 @Module
 public class ActivityModule {
 
-  private Activity mActivity;
+  private final AppCompatActivity mActivity;
 
-  public ActivityModule(Activity mActivity) {
-    this.mActivity = mActivity;
+  public ActivityModule(AppCompatActivity activity) {
+    this.mActivity = activity;
   }
 
   @Provides
-  @ActivityScope
-  Activity provideActivity() {
+  @ActivityContext
+  Context provideContext() {
     return mActivity;
   }
+
+  @Provides
+  AppCompatActivity provideActivity() {
+    return mActivity;
+  }
+
+  @Provides
+  CompositeDisposable provideCompositeDisposable() {
+    return new CompositeDisposable();
+  }
+  @Provides
+  SchedulerProvider provideSchedulerProvider() {
+    return new AppSchedulerProvider();
+  }
+
+  @Provides
+  @PerActivity
+  SplashMvpPresenter<SplashMvpView> provideSplashPresenter(
+      SplashPresenter<SplashMvpView> presenter) {
+    return presenter;
+  }
+
+  @Provides
+  @PerActivity
+  MainMvpPresenter<MainMvpView> provideMainPresenter(
+      MainPresenter<MainMvpView> presenter) {
+    return presenter;
+  }
+
+
 }

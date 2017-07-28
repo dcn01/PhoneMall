@@ -1,9 +1,12 @@
 package com.zhiji.phonemall.di.component;
 
+import android.app.Application;
 import android.content.Context;
-import com.zhiji.phonemall.app.MyApp;
+import com.zhiji.phonemall.app.App;
+import com.zhiji.phonemall.data.DataManager;
 import com.zhiji.phonemall.di.module.AppModule;
 import com.zhiji.phonemall.di.module.HttpModule;
+import com.zhiji.phonemall.di.qualifier.ApplicationContext;
 import dagger.Component;
 import javax.inject.Singleton;
 
@@ -18,8 +21,12 @@ import javax.inject.Singleton;
 @Component(modules = {AppModule.class, HttpModule.class})
 public interface AppComponent {
 
-  Context getApplicationContext();
+  void inject(App app);
 
-  MyApp getMyApp();
+  @ApplicationContext
+  Context getContext();
 
+  Application getApplication();
+
+  DataManager getDataManager();
 }

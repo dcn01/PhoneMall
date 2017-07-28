@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 
 /**
  * <pre>
@@ -21,10 +19,9 @@ import io.reactivex.disposables.Disposable;
  *     desc   :
  * </pre>
  */
-public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
+public abstract class BaseFragment<P extends MvpPresenter> extends Fragment {
 
   protected Context mContext;
-  protected CompositeDisposable mCompositeDisposable;
   protected P mPresenter;
   protected Unbinder mUnbinder;
   protected ProgressDialog mProgressDialog;
@@ -71,7 +68,6 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
     if (mPresenter != null) {
       mPresenter.detachView();
     }
-    unSubscribe();
   }
 
   /**
@@ -105,22 +101,4 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
   protected void showLongToast(String message) {
     Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
   }
-
-  /**
-   * 解除所有的订阅
-   */
-  protected void unSubscribe() {
-    if (mCompositeDisposable != null) {
-      mCompositeDisposable.clear();
-    }
-  }
-
-  protected void addSubscribe(Disposable disposable) {
-    if (mCompositeDisposable == null) {
-      mCompositeDisposable = new CompositeDisposable();
-    }
-    mCompositeDisposable.add(disposable);
-  }
-
-
 }

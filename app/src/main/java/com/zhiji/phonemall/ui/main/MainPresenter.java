@@ -1,8 +1,9 @@
 package com.zhiji.phonemall.ui.main;
 
-import com.zhiji.phonemall.base.RxPresenter;
-import com.zhiji.phonemall.ui.main.MainContract.IPresenter;
-import com.zhiji.phonemall.ui.main.MainContract.IView;
+import com.zhiji.phonemall.base.BasePresenter;
+import com.zhiji.phonemall.data.DataManager;
+import com.zhiji.phonemall.utils.rx.SchedulerProvider;
+import io.reactivex.disposables.CompositeDisposable;
 import javax.inject.Inject;
 
 /**
@@ -12,15 +13,11 @@ import javax.inject.Inject;
  *     desc   :
  * </pre>
  */
-public class MainPresenter extends RxPresenter<IView> implements IPresenter {
+public class MainPresenter<V extends MainMvpView> extends BasePresenter<V> implements MainMvpPresenter<V> {
 
-  @Inject
-  public MainPresenter(IView view) {
-    attachView(view);
-  }
-
-  @Override
-  public void getMainData() {
-    mView.setMainData();
+  public MainPresenter(DataManager dataManager,
+      CompositeDisposable compositeDisposable,
+      SchedulerProvider schedulerProvider) {
+    super(dataManager, compositeDisposable, schedulerProvider);
   }
 }

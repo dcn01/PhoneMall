@@ -1,12 +1,15 @@
 package com.zhiji.phonemall.ui.splash;
 
 import com.zhiji.phonemall.R;
-import com.zhiji.phonemall.app.MyApp;
+import com.zhiji.phonemall.app.App;
 import com.zhiji.phonemall.base.BaseActivity;
 import com.zhiji.phonemall.ui.main.MainActivity;
+import javax.inject.Inject;
 
-public class SplashActivity extends BaseActivity<SplashPresenter> implements SplashContract.IView {
+public class SplashActivity extends BaseActivity implements SplashMvpView {
 
+  @Inject
+  SplashMvpPresenter<SplashMvpView> mPresenter;
   private static final String TAG = "SplashActivity";
 
   @Override
@@ -16,13 +19,17 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
 
   @Override
   protected void initView() {
-    mPresenter.getSplashData();
+    mPresenter.attachView(this);
+    //do something...
+    mPresenter.requestSplashData();
   }
 
+  /**
+   * 利用Dagger2注入Presenter
+   */
   @Override
   protected void initInject() {
-    DaggerSplashComponent.builder().appComponent(MyApp.getAppComponent())
-        .splashModule(new SplashModule(this)).build().inject(this);
+    getActivityComponent().inject(this);
   }
 
   @Override
@@ -43,8 +50,18 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
   }
 
   @Override
-  public void setSplashData() {
-    MainActivity.actionStart(this);
-    finish();
+  public void openLoginActivity() {
+
+  }
+
+  @Override
+  public void openMainActivity() {
+
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    mPresenter.detachView();
   }
 }

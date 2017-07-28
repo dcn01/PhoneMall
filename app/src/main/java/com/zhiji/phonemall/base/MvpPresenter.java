@@ -7,11 +7,9 @@ package com.zhiji.phonemall.base;
  *     desc   :
  * </pre>
  */
-public interface BaseView {
+public interface MvpPresenter<V extends MvpView> {
 
-  void showLoading();
+  void attachView(V view);
 
-  void hideLoading();
-
-  void showMessage(String msg);
+  void detachView();
 }

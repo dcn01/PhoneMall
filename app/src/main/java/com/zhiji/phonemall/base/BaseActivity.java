@@ -7,7 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import javax.inject.Inject;
+import com.zhiji.phonemall.app.App;
+import com.zhiji.phonemall.di.component.ActivityComponent;
+import com.zhiji.phonemall.di.component.DaggerActivityComponent;
+import com.zhiji.phonemall.di.module.ActivityModule;
 
 /**
  * <pre>
@@ -16,11 +19,11 @@ import javax.inject.Inject;
  *     desc   :
  * </pre>
  */
-public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity {
-  @Inject
-  protected P mPresenter;
-  protected Unbinder mUnbinder;
-  protected ProgressDialog mProgressDialog;
+public abstract class BaseActivity extends AppCompatActivity {
+
+  private Unbinder mUnbinder;
+  private ProgressDialog mProgressDialog;
+  private ActivityComponent mActivityComponent;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,8 +32,15 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     mUnbinder = ButterKnife.bind(this);
     mProgressDialog = new ProgressDialog(this);
     mProgressDialog.setMessage("正在加载中...");
+    mActivityComponent = DaggerActivityComponent.builder()
+        .appComponent(((App) getApplication()).getAppComponent())
+        .activityModule(new ActivityModule(this)).build();
     initInject();
     initView();
+  }
+
+  public ActivityComponent getActivityComponent() {
+    return mActivityComponent;
   }
 
   /**
@@ -52,9 +62,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
   protected void onDestroy() {
     super.onDestroy();
     mUnbinder.unbind();
-    if (mPresenter != null) {
-      mPresenter.detachView();
-    }
   }
 
   /**

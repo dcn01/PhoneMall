@@ -1,4 +1,4 @@
-package com.zhiji.phonemall.model.http.manager;
+package com.zhiji.phonemall.http.manager;
 
 import java.io.IOException;
 import java.util.Iterator;

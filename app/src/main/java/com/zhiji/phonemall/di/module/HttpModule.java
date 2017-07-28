@@ -1,6 +1,7 @@
 package com.zhiji.phonemall.di.module;
 
-import com.zhiji.phonemall.model.http.api.ApiService;
+import com.zhiji.phonemall.http.api.ApiService;
+import com.zhiji.phonemall.http.interceptor.LoggingInterceptor;
 import dagger.Module;
 import dagger.Provides;
 import java.util.concurrent.TimeUnit;
@@ -41,6 +42,7 @@ public class HttpModule {
   @Singleton
   @Provides
   OkHttpClient provideOkHttpClinet(OkHttpClient.Builder builder) {
+    builder.addInterceptor(new LoggingInterceptor());//添加日志拦截器，拦截request和response信息
     builder.connectTimeout(10, TimeUnit.SECONDS);
     builder.readTimeout(20, TimeUnit.SECONDS);
     builder.writeTimeout(20, TimeUnit.SECONDS);

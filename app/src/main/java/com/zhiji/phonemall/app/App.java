@@ -2,12 +2,14 @@ package com.zhiji.phonemall.app;
 
 import android.app.Activity;
 import android.app.Application;
+import com.zhiji.phonemall.data.DataManager;
 import com.zhiji.phonemall.di.component.AppComponent;
 import com.zhiji.phonemall.di.component.DaggerAppComponent;
 import com.zhiji.phonemall.di.module.AppModule;
 import com.zhiji.phonemall.di.module.HttpModule;
 import java.util.HashSet;
 import java.util.Set;
+import javax.inject.Inject;
 
 /**
  * <pre>
@@ -16,17 +18,25 @@ import java.util.Set;
  *     desc   :
  * </pre>
  */
-public class MyApp extends Application {
+public class App extends Application {
 
-  private static MyApp mApp;
-  private static AppComponent mAppComponent;
+  private AppComponent mAppComponent;
   private Set<Activity> mActivitySet;
+  @Inject
+  DataManager mDataManager;
 
-  public static AppComponent getAppComponent() {
-    return mAppComponent;
+  @Override
+  public void onCreate() {
+    super.onCreate();
+    //注入DataManager
+    mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this))
+        .httpModule(new HttpModule()).build();
+    mAppComponent.inject(this);
   }
-  public static MyApp getMyApp() {
-    return mApp;
+
+
+  public AppComponent getAppComponent() {
+    return mAppComponent;
   }
 
   public void addActivity(Activity activity) {
@@ -55,13 +65,5 @@ public class MyApp extends Application {
 
   }
 
-  @Override
-  public void onCreate() {
-    super.onCreate();
-    mApp = this;
-    if (mAppComponent == null) {
-      mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this))
-          .httpModule(new HttpModule()).build();
-    }
-  }
+
 }
