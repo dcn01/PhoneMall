@@ -1,16 +1,20 @@
 package com.zhiji.phonemall.ui.splash;
 
-import com.google.gson.Gson;
 import com.zhiji.phonemall.base.BasePresenter;
 import com.zhiji.phonemall.data.DataManager;
-import com.zhiji.phonemall.data.network.model.TestResponse;
-import com.zhiji.phonemall.ui.main.MainActivity;
-import com.zhiji.phonemall.utils.LogUtil;
-import com.zhiji.phonemall.utils.rx.RxUtil;
 import com.zhiji.phonemall.utils.rx.SchedulerProvider;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
+
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
+
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
 
 /**
  * <pre>
@@ -20,31 +24,47 @@ import javax.inject.Inject;
  * </pre>
  */
 public class SplashPresenter<V extends SplashMvpView> extends BasePresenter<V> implements
-    SplashMvpPresenter<V> {
+        SplashMvpPresenter<V> {
 
-  @Inject
-  public SplashPresenter(DataManager dataManager,
-      CompositeDisposable compositeDisposable,
-      SchedulerProvider schedulerProvider) {
-    super(dataManager, compositeDisposable, schedulerProvider);
-  }
+    @Inject
+    public SplashPresenter(DataManager dataManager,
+                           CompositeDisposable compositeDisposable,
+                           SchedulerProvider schedulerProvider) {
+        super(dataManager, compositeDisposable, schedulerProvider);
+    }
 
-  @Override
-  public void requestSplashData() {
-    getCompositeDisposable()
-        .add(getDataManager().requestSplashData()
-            .compose(RxUtil.<TestResponse>rxSchedulerHelper())
-            .subscribe(new Consumer<TestResponse>() {
-              @Override
-              public void accept(TestResponse testResponse) throws Exception {
-                LogUtil.d("TAG", new Gson().toJson(testResponse));
-                getMvpView().openMainActivity();
-              }
-            }, new Consumer<Throwable>() {
-              @Override
-              public void accept(Throwable throwable) throws Exception {
-                LogUtil.d("TAG", throwable.getMessage());
-              }
-            }));
-  }
+    @Override
+    public void requestSplashData() {
+        final int count = 5;
+        Observable.interval(0, 1, TimeUnit.SECONDS)
+                .take(count + 1)
+                .map(new Function<Long, Long>() {
+                    @Override
+                    public Long apply(@NonNull Long aLong) throws Exception {
+                        return count - aLong;
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        getCompositeDisposable().add(d);
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Long aLong) {
+                        getMvpView().showTime(String.valueOf(aLong));
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        getMvpView().showMessage(e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        getMvpView().openMainActivity();
+                    }
+                });
+    }
 }
