@@ -49,4 +49,5 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     //GreenDao
     compile 'org.greenrobot:greendao:3.2.2'
+    compile 'com.ashokvarma.android:bottom-navigation-bar:2.0.2'
 }

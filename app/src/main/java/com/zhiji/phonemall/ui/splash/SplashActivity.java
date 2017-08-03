@@ -56,7 +56,7 @@ public class SplashActivity extends BaseActivity implements SplashMvpView {
 
   @Override
   public void openMainActivity() {
-
+    MainActivity.openActivity(this);
   }
 
   @Override

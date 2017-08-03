@@ -20,6 +20,7 @@ import javax.inject.Inject;
  */
 public class App extends Application {
 
+  public static App mInstance;
   private AppComponent mAppComponent;
   private Set<Activity> mActivitySet;
   @Inject
@@ -28,6 +29,7 @@ public class App extends Application {
   @Override
   public void onCreate() {
     super.onCreate();
+    mInstance = this;
     //注入DataManager
     mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this))
         .httpModule(new HttpModule()).build();

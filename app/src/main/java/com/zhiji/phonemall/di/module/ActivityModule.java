@@ -4,9 +4,18 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import com.zhiji.phonemall.di.qualifier.ActivityContext;
 import com.zhiji.phonemall.di.scope.PerActivity;
-import com.zhiji.phonemall.ui.main.MainMvpPresenter;
-import com.zhiji.phonemall.ui.main.MainMvpView;
-import com.zhiji.phonemall.ui.main.MainPresenter;
+import com.zhiji.phonemall.ui.cart.CartMvpPresenter;
+import com.zhiji.phonemall.ui.cart.CartMvpView;
+import com.zhiji.phonemall.ui.cart.CartPresenter;
+import com.zhiji.phonemall.ui.category.CategoryMvpPresenter;
+import com.zhiji.phonemall.ui.category.CategoryMvpView;
+import com.zhiji.phonemall.ui.category.CategoryPresenter;
+import com.zhiji.phonemall.ui.home.HomeMvpPresenter;
+import com.zhiji.phonemall.ui.home.HomeMvpView;
+import com.zhiji.phonemall.ui.home.HomePresenter;
+import com.zhiji.phonemall.ui.mine.MineMvpPresenter;
+import com.zhiji.phonemall.ui.mine.MineMvpView;
+import com.zhiji.phonemall.ui.mine.MinePresenter;
 import com.zhiji.phonemall.ui.splash.SplashMvpPresenter;
 import com.zhiji.phonemall.ui.splash.SplashMvpView;
 import com.zhiji.phonemall.ui.splash.SplashPresenter;
@@ -60,11 +69,22 @@ public class ActivityModule {
   }
 
   @Provides
-  @PerActivity
-  MainMvpPresenter<MainMvpView> provideMainPresenter(
-      MainPresenter<MainMvpView> presenter) {
+  HomeMvpPresenter<HomeMvpView> provideHomePresenter(HomePresenter<HomeMvpView> presenter) {
     return presenter;
   }
+  @Provides
+  CategoryMvpPresenter<CategoryMvpView> provideCategoryPresenter(CategoryPresenter<CategoryMvpView> presenter) {
+    return presenter;
+  }
+  @Provides
+  CartMvpPresenter<CartMvpView> provideCartPresenter(CartPresenter<CartMvpView> presenter) {
+    return presenter;
+  }
+  @Provides
+  MineMvpPresenter<MineMvpView> provideMinePresenter(MinePresenter<MineMvpView> presenter) {
+    return presenter;
+  }
+
 
 
 }

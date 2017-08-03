@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.zhiji.phonemall.base.BasePresenter;
 import com.zhiji.phonemall.data.DataManager;
 import com.zhiji.phonemall.data.network.model.TestResponse;
+import com.zhiji.phonemall.ui.main.MainActivity;
 import com.zhiji.phonemall.utils.LogUtil;
 import com.zhiji.phonemall.utils.rx.RxUtil;
 import com.zhiji.phonemall.utils.rx.SchedulerProvider;
@@ -37,6 +38,7 @@ public class SplashPresenter<V extends SplashMvpView> extends BasePresenter<V> i
               @Override
               public void accept(TestResponse testResponse) throws Exception {
                 LogUtil.d("TAG", new Gson().toJson(testResponse));
+                getMvpView().openMainActivity();
               }
             }, new Consumer<Throwable>() {
               @Override
