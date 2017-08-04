@@ -81,13 +81,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private void showRestoreFragment(int var1,int var2,int var3){
-        getSupportFragmentManager()
-                .beginTransaction()
-                .hide(mFragmentList.get(var1))
-                .hide(mFragmentList.get(var2))
-                .hide(mFragmentList.get(var3))
-                .show(mFragment)
-                .commit();
+        FragmentTransaction transaction=getSupportFragmentManager().beginTransaction();
+        if(mFragmentList.get(var1).isAdded()){
+            transaction.hide(mFragmentList.get(var1));
+        }
+        if(mFragmentList.get(var2).isAdded()){
+            transaction.hide(mFragmentList.get(var2));
+        }
+        if(mFragmentList.get(var3).isAdded()){
+            transaction.hide(mFragmentList.get(var3));
+        }
+        if(mFragment.isHidden()){
+            transaction.show(mFragment).commit();
+        }
+
     }
 
     public ActivityComponent getActivityComponent() {
